@@ -69,6 +69,55 @@
     
     <div class="jumbotron col-sm-8 col-sm-push-2">
         <h1 class="text-center">Manage Groups</h1>
+         <h2 class="text-center">Create Group</h2>
+    </div>
+    
+    <div class="container">
+    <form>
+        <div class="row">
+        <div class="form-group col-sm-4 col-sm-push-1">
+            <label for="courseNumber">Course Number-Section</label>
+            <select id="courseNumber" name="courseNumber" class="form-control">
+                <!-- These options will be generated from db -->
+                <option>CS 313-02</option>
+            </select>
+        </div>
+        </div>
+        <div class="row">
+        <div class="form-group col-sm-4 col-sm-push-1">
+            <label for="studentName">Student</label>
+            <select id="studentName" name ="studentName" class="form-control">
+                <!-- These options will be generated from db -->
+                <option>Billy-Bob Smith</option>
+            </select>
+        </div>
+        </div>
+        <div class="row">
+        <div class="form-group">
+            <div class="col-sm-4 col-sm-push-1">
+                <label for="groupNumber">Group Number</label>
+                <select id="groupNumber" name="groupNumber" class="form-control">
+                    <!-- These options will be generated from db -->
+                    <option>01</option>
+                </select>
+            </div>
+            <div class="col-sm-1 col-sm-push-1">
+                <br/>
+                <p style="display: inline;">Or</p>
+            </div>
+            <div class="col-sm-4 col-sm-push-1">
+                <label for="newGroupNumber">New Group Number</label>
+                <input type="text" class="form-control" id="newGroupNumber" placeholder="02">
+            </div>
+        </div>
+        </div>
+        <div class="row">
+        <div class="form-group col-sm-2 col-sm-push-1">
+            <br/>
+            <button type="submit" class="btn btn-default">Add to Group</button>
+        </div>
+        </div>
+    </form>
     </div>
     
     <!-- JQUERY -->
