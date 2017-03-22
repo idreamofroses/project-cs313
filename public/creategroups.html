@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Welcome</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="css/bootstrap-theme.min.css">
+
+    <!-- My css -->
+    <link rel="stylesheet" href="css/main.css">
+
+</head>
+    
+<body>
+    
+    <nav class="navbar navbar-default">
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    
+    </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav">
+        <li ><a href="welcome.html">Quiz Applet</a></li>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Classes <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li><a href="viewclasses.html">View Classes</a></li>
+            <li role="separator" class="divider"></li>
+            <li><a href="createclasses.html">Add Classes</a></li>
+          </ul>
+        </li>
+        <li class="dropdown active">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Groups <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li><a href="viewgroups.html">View Groups By Class</a></li>
+            <li role="separator" class="divider"></li>
+            <li><a href="creategroups.html">Create Groups</a></li>
+          </ul>
+        </li>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Quizzes <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li><a href="viewquizzes.html">View Quizzes</a></li>
+            <li role="separator" class="divider"></li>
+            <li><a href="createquizzes.html">Create Quizzes</a></li>
+          </ul>
+        </li>
+        <li><a href="managegrades.html">Grades</a></li>
+      </ul>
+     
+      <ul class="nav navbar-nav navbar-right">
+        <li><a>Welcome, Brother Burton</a></li>
+        <li class="active"><a href="#">Logout</a></li>
+      </ul>
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>
+    
+    <div class="jumbotron col-sm-8 col-sm-push-2">
+        <h1 class="text-center">Manage Groups</h1>
+         <h2 class="text-center">Create Group</h2>
+    </div>
+    
+    <div class="container">
+    <form>
+        <div class="row">
+        <div class="form-group col-sm-4 col-sm-push-1">
+            <label for="courseNumber">Course Number-Section</label>
+            <select id="courseNumber" name="courseNumber" class="form-control">
+                <!-- These options will be generated from db -->
+                <option>CS 313-02</option>
+            </select>
+        </div>
+        </div>
+        <div class="row">
+        <div class="form-group col-sm-4 col-sm-push-1">
+            <label for="studentName">Student</label>
+            <select id="studentName" name ="studentName" class="form-control">
+                <!-- These options will be generated from db -->
+                <option>Billy-Bob Smith</option>
+            </select>
+        </div>
+        </div>
+        <div class="row">
+        <div class="form-group">
+            <div class="col-sm-4 col-sm-push-1">
+                <label for="groupNumber">Group Number</label>
+                <select id="groupNumber" name="groupNumber" class="form-control">
+                    <!-- These options will be generated from db -->
+                    <option>01</option>
+                </select>
+            </div>
+            <div class="col-sm-1 col-sm-push-1">
+                <br/>
+                <p style="display: inline;">Or</p>
+            </div>
+            <div class="col-sm-4 col-sm-push-1">
+                <label for="newGroupNumber">New Group Number</label>
+                <input type="text" class="form-control" id="newGroupNumber" placeholder="02">
+            </div>
+        </div>
+        </div>
+        <div class="row">
+        <div class="form-group col-sm-2 col-sm-push-1">
+            <br/>
+            <button type="submit" class="btn btn-default">Add to Group</button>
+        </div>
+        </div>
+    </form>
+    </div>
+    
+    <!-- JQUERY -->
+    <script src="js/jquery.min.js"></script>
+        
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+</body>
+</html>
