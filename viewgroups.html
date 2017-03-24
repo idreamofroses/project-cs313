@@ -145,7 +145,7 @@
        <div class="container">
     <form>
         <div class="row">
-        <div class="form-group col-sm-10 col-sm-push-1">
+        <div class="form-group col-sm-6 col-sm-push-2">
             <label for="courseNumber">Course Number-Section</label>
             <select id="courseNumber" name="courseNumber" class="form-control" onchange="getGroups()" >
                 <!-- this is just a placeholder These options will be generated from db -->
@@ -161,14 +161,19 @@
     
     <div class="container">
     <div class="row">
-        <div class="col-sm-10 col-sm-push-1">
+        <div class="col-sm-6 col-sm-push-2">
             <ul id="students">
                 
             </ul>
-            
-            <a href="addstudentstogroup.html" class="btn btn-default">Add Students to Group</a>
-            <a href="creategroups.html" class="btn btn-default">Create New Group</a>
-        </div>    
+         </div> 
+        </div>
+    <div class="row">
+        <div class=" col-sm-2 col-sm-push-2">
+            <a href="addstudentstogroup.html" class="btn btn-default"><span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span> Add Students to Group</a>
+        </div>
+        <div class=" col-sm-2 col-sm-push-4">
+            <a href="creategroups.html" class="btn btn-default">Create New Group <span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span></a>
+        </div> 
     </div>
     </div>
     <!-- JQUERY -->
