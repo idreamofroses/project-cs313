@@ -37,6 +37,12 @@ app.get('/viewStudents', function(request, response) {
     
 });
 
+app.get('/getStudents', function(request, response) {
+    console.log("get students called");
+    getStudents(request, response);
+    
+});
+
 app.post('/newClass', function(request, response) {
     console.log("success!!");
     insertClass(request, response);
@@ -145,6 +151,42 @@ function viewStudents(request, response) {
             console.log("Found result: " + JSON.stringify(result.rows));
             
             response.json(result.rows);
+        });
+    }); 
+}
+
+function getStudents(request, response) {
+   var requestUrl = url.parse(request.url, true);
+   var classId = parseInt(requestUrl.query.classId);  
+    console.log("class id: " + classId);
+  
+    var client = new pg.Client(connectionString);
+    
+   client.connect(function(err){
+        if (err) {
+            console.log("Error connecting to database");
+            console.log(err);
+            callback(err, null);
+        }
+        
+        var sql = "SELECT cu.firstname, cu.lastname, c.name, c.class_code, c.section  FROM classuserTOclass ctc INNER JOIN classUser cu ON ctc.classuser_id = cu.id INNER JOIN class c ON class_id = c.id WHERE c.id = $1::int;";
+        var params = [classId];
+        
+        var query = client.query(sql, params, function(err, result){
+            client.end(function(err) {
+                if (err) throw err;
+            });
+            
+            if (err) {
+                console.log("Error in query");
+                console.log(err);
+                callback(err, null);
+            }
+            
+            console.log("Found result: " + JSON.stringify(result.rows));
+            
+           // response.json(result.rows);
+            response.render('pages/studentsInclass', { 'sql' : result.rows });
         });
     }); 
 }

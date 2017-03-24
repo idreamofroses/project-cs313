@@ -1,8 +1,7 @@
 <!DOCTYPE html>
 <html>
-
 <head>
-    <title>View Classes</title>
+	<title>Students In Class</title>
     <link rel="stylesheet" href="css/bootstrap.min.css">
 
     <!-- Optional theme -->
@@ -10,33 +9,8 @@
 
     <!-- My css -->
     <link rel="stylesheet" href="css/main.css">
-    <script>
-        function viewClasses() {
-            var xhttp = new XMLHttpRequest();
-            xhttp.onreadystatechange = function() {
-                if (this.readyState == 4 && this.status == 200) {
-                    var tableData = "<tr><th>Course Name</th><th>Course Number</th><th>Section Number</th><th>View Students</th></tr> ";
-                    var myObj = JSON.parse(this.responseText);
-                    for(var i = 0; i < myObj.length; i++)
-                    {
-                        var classId = myObj[i].id;
-                        var courseTitle = myObj[i].name;
-                        var courseNumber = myObj[i].class_code;
-                        var sectionNumber = myObj[i].section;
-                      var row = "<tr><td>" + courseTitle + "</td><td>" + courseNumber + "</td><td>" + sectionNumber + "</td><td><a href='/getStudents?classId=" + classId + "' class='btn btn-default'><span class='glyphicon glyphicon-arrow-right' aria-hidden='true'></span></a></td></tr>";
-                      tableData += row;
-                    }
-                    document.getElementById("classTable").innerHTML =  tableData;
-                }
-            };
-            xhttp.open("GET", "/viewClasses", true);
-            xhttp.send();
-        }
-    </script>
 </head>
-    
-<body onload="viewClasses();">
-    
+<body >
     <nav class="navbar navbar-default">
   <div class="container-fluid">
     <!-- Brand and toggle get grouped for better mobile display -->
@@ -91,21 +65,22 @@
     
     <div class="jumbotron col-sm-8 col-sm-push-2">
         <h1 class="text-center">Manage Classes</h1>
-        <h2 class="text-center">View Classes</h2>
+        <h2 class="text-center">Student List</h2>
     </div>
     
     <div class="container">
-        <div class="row">
-            <div class="col-sm-10 col-sm-push-1">
-                <table class="table" id="classTable">
-                   
-                </table>
-            </div>
-            <div class="col-sm-7">
-                <a href="createclasses.html" class="btn btn-default btn-lg pull-right">Create New Class</a>
-                <br/>
-            </div>
-        </div>
+    <div class="row">
+        <div class="col-sm-10 col-sm-push-1">
+            <h3 ><%= sql[0].name  %>: <%= sql[0].class_code  %> - <%= sql[0].section  %></h3>
+            <ul>
+                <% for(var i = 0; i < sql.length; i++) {%>
+                <li><%= sql[i].firstname %> <%= sql[i].lastname %></li>
+                <% } %>
+            </ul>
+            
+            <a href="viewclasses.html" class="btn btn-default"><span class='glyphicon glyphicon-arrow-left' aria-hidden='true'></span> View Classes</a>
+        </div>    
+    </div>
     </div>
     
     <!-- JQUERY -->
