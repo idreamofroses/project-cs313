@@ -76,18 +76,18 @@
     <div class="container">
         <div class="row">
             <div class="col-sm-12">
-                <form>
+                <form action="/newClass" method="post">
                     <div class="form-group">
                         <label for="courseName">Course Name</label>
-                        <input type="text" class="form-control" id="courseName" placeholder="Web Engineering II">
+                        <input type="text" class="form-control" id="courseName" name="courseName" placeholder="Web Engineering II">
                     </div>
                     <div class="form-group">
                         <label for="courseNumber">Course Number</label>
-                        <input type="text" class="form-control" id="courseNumber" placeholder="CS 313">
+                        <input type="text" class="form-control" id="courseNumber" name="courseNumber" placeholder="CS 313">
                     </div>
                     <div class="form-group">
                         <label for="sectionNumber">Section Number</label>
-                        <input type="text" class="form-control" id="sectionNumber" placeholder="02">
+                        <input type="text" class="form-control" id="sectionNumber" name="sectionNumber" placeholder="02">
                     </div>
                     <button type="submit" class="btn btn-default">Insert</button>
                 </form>

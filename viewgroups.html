@@ -10,10 +10,80 @@
 
     <!-- My css -->
     <link rel="stylesheet" href="css/main.css">
-
+    <script>
+        function viewClasses() {
+           // alert("ViewClasses() called");
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    var tableData = "";
+                    var myObj = JSON.parse(this.responseText);
+                    for(var i = 0; i < myObj.length; i++)
+                    {
+                        var courseid = myObj[i].id;
+                        var courseNumber = myObj[i].class_code;
+                        var sectionNumber = myObj[i].section;
+                      var row = "<option value='" + courseid + "'>" + courseNumber + "-" + sectionNumber + "</option>";
+                      tableData += row;
+                    }
+                    document.getElementById("courseNumber").innerHTML =  tableData;
+                    getGroups();
+                }
+            };
+            xhttp.open("GET", "/viewClasses", true);
+            xhttp.send();
+        }
+        function getGroups() {
+           // alert("getQuizzes() called");
+            var classId = document.getElementById("courseNumber").value;
+          //  alert("Class Id:" + classId);
+            var url = "/viewGroups?classId=" + classId;
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    var tableData = "";
+                    var myObj = JSON.parse(this.responseText);
+                    for(var i = 0; i < myObj.length; i++)
+                    {
+                        var quizId = myObj[i].id;
+                        var gName = myObj[i].group_name;
+                        var row = "<option value='" + quizId + "'>" + gName + "</option>";
+                      tableData += row;
+                    }
+                    document.getElementById("groupName").innerHTML =  tableData;
+                    getStudents();
+                }
+            };
+            xhttp.open("GET", url, true);
+            xhttp.send();
+        }
+         function getStudents() {
+            //alert("getStudents() called");
+            var groupId = document.getElementById("groupName").value;
+            //alert("Group Id:" + groupId);
+            var url = "/viewStudents?groupId=" + groupId;
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    var tableData = "";
+                    var myObj = JSON.parse(this.responseText);
+                    for(var i = 0; i < myObj.length; i++)
+                    {
+                        var firstname = myObj[i].firstname;
+                        var lastname = myObj[i].lastname;
+                        var row = "<li>" + firstname + " " + lastname + "</li>";
+                      tableData += row;
+                    }
+                    document.getElementById("students").innerHTML =  tableData; 
+                }
+            };
+            xhttp.open("GET", url, true);
+            xhttp.send();
+        }
+    </script>
 </head>
     
-<body>
+<body onload="viewClasses()">
     
     <nav class="navbar navbar-default">
   <div class="container-fluid">
@@ -72,6 +142,32 @@
         <h2 class="text-center">View Groups</h2>
     </div>
     
+       <div class="container">
+    <form>
+        <div class="row">
+        <div class="form-group col-sm-10 col-sm-push-1">
+            <label for="courseNumber">Course Number-Section</label>
+            <select id="courseNumber" name="courseNumber" class="form-control" onchange="getGroups()" >
+                <!-- this is just a placeholder These options will be generated from db -->
+                <option>CS 313-02</option>
+            </select>
+            <label for="groupName">Group Name</label>
+            <select id="groupName" name="groupName" class="form-control" onchange="getStudents()">
+            </select>
+        </div>
+        </div>
+    </form>
+    </div>
+    
+    <div class="container">
+    <div class="row">
+        <div class="col-sm-10 col-sm-push-1">
+            <ul id="students">
+                
+            </ul>
+        </div>    
+    </div>
+    </div>
     <!-- JQUERY -->
     <script src="js/jquery.min.js"></script>
         
