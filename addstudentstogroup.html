@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <title>View Groups</title>
+    <title>Add Student to Group</title>
     <link rel="stylesheet" href="css/bootstrap.min.css">
 
     <!-- Optional theme -->
@@ -12,7 +12,34 @@
     <link rel="stylesheet" href="css/main.css">
     <script>
         function viewClasses() {
-           // alert("ViewClasses() called");
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    var tableData = " ";
+                    var myObj = JSON.parse(this.responseText);
+                   // alert("num items:" + myObj.length);
+                    for(var i = 0; i < myObj.length; i++)
+                    {
+                        var classId = myObj[i].id;
+                        var courseTitle = myObj[i].name;
+                        var courseNumber = myObj[i].class_code;
+                        var sectionNumber = myObj[i].section;
+                        var row = "<option value='" + classId + "'>" + courseTitle + ": " + courseNumber + " - " + sectionNumber + "</option>";
+                      tableData += row;
+                    }
+                    document.getElementById("courseNumber").innerHTML =  tableData;
+                    getStudents();
+                    getGroups();
+                }
+            };
+            xhttp.open("GET", "/viewClasses", true);
+            xhttp.send();
+        }
+         function getStudents() {
+            //alert("getStudents() called");
+            var classId = document.getElementById("courseNumber").value;
+            //alert("Group Id:" + groupId);
+            var url = "/getStudentsInClass?classId=" + classId;
             var xhttp = new XMLHttpRequest();
             xhttp.onreadystatechange = function() {
                 if (this.readyState == 4 && this.status == 200) {
@@ -20,17 +47,16 @@
                     var myObj = JSON.parse(this.responseText);
                     for(var i = 0; i < myObj.length; i++)
                     {
-                        var courseid = myObj[i].id;
-                        var courseNumber = myObj[i].class_code;
-                        var sectionNumber = myObj[i].section;
-                      var row = "<option value='" + courseid + "'>" + courseNumber + "-" + sectionNumber + "</option>";
+                        var userId = myObj[i].id;
+                        var firstname = myObj[i].firstname;
+                        var lastname = myObj[i].lastname;
+                        var row = "<option value='" + userId + "'>" + firstname + " " + lastname + "</option>";
                       tableData += row;
                     }
-                    document.getElementById("courseNumber").innerHTML =  tableData;
-                    getGroups();
+                    document.getElementById("studentName").innerHTML =  tableData; 
                 }
             };
-            xhttp.open("GET", "/viewClasses", true);
+            xhttp.open("GET", url, true);
             xhttp.send();
         }
         function getGroups() {
@@ -45,36 +71,13 @@
                     var myObj = JSON.parse(this.responseText);
                     for(var i = 0; i < myObj.length; i++)
                     {
-                        var quizId = myObj[i].id;
+                        var groupId = myObj[i].id;
                         var gName = myObj[i].group_name;
-                        var row = "<option value='" + quizId + "'>" + gName + "</option>";
+                        var row = "<option value='" + groupId + "'>" + gName + "</option>";
                       tableData += row;
                     }
                     document.getElementById("groupName").innerHTML =  tableData;
                     getStudents();
-                }
-            };
-            xhttp.open("GET", url, true);
-            xhttp.send();
-        }
-         function getStudents() {
-            //alert("getStudents() called");
-            var groupId = document.getElementById("groupName").value;
-            //alert("Group Id:" + groupId);
-            var url = "/viewStudents?groupId=" + groupId;
-            var xhttp = new XMLHttpRequest();
-            xhttp.onreadystatechange = function() {
-                if (this.readyState == 4 && this.status == 200) {
-                    var tableData = "";
-                    var myObj = JSON.parse(this.responseText);
-                    for(var i = 0; i < myObj.length; i++)
-                    {
-                        var firstname = myObj[i].firstname;
-                        var lastname = myObj[i].lastname;
-                        var row = "<li>" + firstname + " " + lastname + "</li>";
-                      tableData += row;
-                    }
-                    document.getElementById("students").innerHTML =  tableData; 
                 }
             };
             xhttp.open("GET", url, true);
@@ -101,7 +104,7 @@
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav">
-        <li><a href="welcome.html">Quiz Applet</a></li>
+        <li ><a href="welcome.html">Quiz Applet</a></li>
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Classes <span class="caret"></span></a>
           <ul class="dropdown-menu">
@@ -139,38 +142,48 @@
     
     <div class="jumbotron col-sm-8 col-sm-push-2">
         <h1 class="text-center">Manage Groups</h1>
-        <h2 class="text-center">View Groups</h2>
+         <h2 class="text-center">Add Student to Group</h2>
     </div>
     
-       <div class="container">
-    <form>
+    <div class="container">
+    <form action="/addStudentToGroup" method="post">
         <div class="row">
-        <div class="form-group col-sm-10 col-sm-push-1">
+        <div class="form-group col-sm-6 col-sm-push-2">
             <label for="courseNumber">Course Number-Section</label>
-            <select id="courseNumber" name="courseNumber" class="form-control" onchange="getGroups()" >
-                <!-- this is just a placeholder These options will be generated from db -->
+            <select id="courseNumber" name="courseNumber" class="form-control" onchange="getStudents(); getGroups();">
+                <!-- These options will be generated from db -->
                 <option>CS 313-02</option>
             </select>
-            <label for="groupName">Group Name</label>
-            <select id="groupName" name="groupName" class="form-control" onchange="getStudents()">
+        </div>
+        </div>
+        <div class="row">
+        <div class="form-group col-sm-6 col-sm-push-2">
+            <label for="studentName">Student</label>
+            <select id="studentName" name ="studentName" class="form-control">
+                <!-- These options will be generated from db -->
+                <option>Billy-Bob Smith</option>
             </select>
+        </div>
+        </div>
+        <div class="row">
+        <div class="form-group col-sm-6 col-sm-push-2">
+            <label for="groupName">Group Name</label>
+            <select id="groupName" name="groupName" class="form-control">
+                <!-- These options will be generated from db -->
+                <option>01</option>
+            </select>
+        </div>
+        </div>
+        <div class="row">
+        <div class="form-group col-sm-2 col-sm-push-4">
+            <br/>
+            <a href="viewGroups.html" class="btn btn-default">View Groups</a>
+            <button type="submit" class="btn btn-default">Add to Group</button>
         </div>
         </div>
     </form>
     </div>
     
-    <div class="container">
-    <div class="row">
-        <div class="col-sm-10 col-sm-push-1">
-            <ul id="students">
-                
-            </ul>
-            
-            <a href="addstudentstogroup.html" class="btn btn-default">Add Students to Group</a>
-            <a href="creategroups.html" class="btn btn-default">Create New Group</a>
-        </div>    
-    </div>
-    </div>
     <!-- JQUERY -->
     <script src="js/jquery.min.js"></script>
         

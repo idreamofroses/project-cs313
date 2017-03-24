@@ -10,10 +10,33 @@
 
     <!-- My css -->
     <link rel="stylesheet" href="css/main.css">
-
+    <script>
+        function viewClasses() {
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    var tableData = " ";
+                    var myObj = JSON.parse(this.responseText);
+                   // alert("num items:" + myObj.length);
+                    for(var i = 0; i < myObj.length; i++)
+                    {
+                        var classId = myObj[i].id;
+                        var courseTitle = myObj[i].name;
+                        var courseNumber = myObj[i].class_code;
+                        var sectionNumber = myObj[i].section;
+                        var row = "<option value='" + classId + "'>" + courseTitle + ": " + courseNumber + " - " + sectionNumber + "</option>"
+                      tableData += row;
+                    }
+                    document.getElementById("courseNumber").innerHTML =  tableData;
+                }
+            };
+            xhttp.open("GET", "/viewClasses", true);
+            xhttp.send();
+        }
+    </script>
 </head>
     
-<body>
+<body onload="viewClasses()">
     
     <nav class="navbar navbar-default">
   <div class="container-fluid">
@@ -69,13 +92,13 @@
     
     <div class="jumbotron col-sm-8 col-sm-push-2">
         <h1 class="text-center">Manage Groups</h1>
-         <h2 class="text-center">Create Group</h2>
+         <h2 class="text-center">Create New Group</h2>
     </div>
     
     <div class="container">
-    <form>
+    <form action="/newGroup" method="post">
         <div class="row">
-        <div class="form-group col-sm-4 col-sm-push-1">
+        <div class="form-group col-sm-6 col-sm-push-2">
             <label for="courseNumber">Course Number-Section</label>
             <select id="courseNumber" name="courseNumber" class="form-control">
                 <!-- These options will be generated from db -->
@@ -84,35 +107,13 @@
         </div>
         </div>
         <div class="row">
-        <div class="form-group col-sm-4 col-sm-push-1">
-            <label for="studentName">Student</label>
-            <select id="studentName" name ="studentName" class="form-control">
-                <!-- These options will be generated from db -->
-                <option>Billy-Bob Smith</option>
-            </select>
+        <div class="form-group col-sm-6 col-sm-push-2">
+            <label for="newGroupNumber">New Group Number</label>
+            <input type="text" class="form-control" id="newGroupNumber" name="newGroupNumber" placeholder="02">
         </div>
         </div>
         <div class="row">
-        <div class="form-group">
-            <div class="col-sm-4 col-sm-push-1">
-                <label for="groupNumber">Group Number</label>
-                <select id="groupNumber" name="groupNumber" class="form-control">
-                    <!-- These options will be generated from db -->
-                    <option>01</option>
-                </select>
-            </div>
-            <div class="col-sm-1 col-sm-push-1">
-                <br/>
-                <p style="display: inline;">Or</p>
-            </div>
-            <div class="col-sm-4 col-sm-push-1">
-                <label for="newGroupNumber">New Group Number</label>
-                <input type="text" class="form-control" id="newGroupNumber" placeholder="02">
-            </div>
-        </div>
-        </div>
-        <div class="row">
-        <div class="form-group col-sm-2 col-sm-push-1">
+        <div class="form-group col-sm-2 col-sm-push-4">
             <br/>
             <button type="submit" class="btn btn-default">Add to Group</button>
         </div>

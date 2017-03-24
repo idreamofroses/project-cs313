@@ -21,31 +21,45 @@ app.get('/', function(request, response) {
 });
 
 app.get('/viewClasses', function(request, response) {
-    console.log("view Classes called");
+  //  console.log("view Classes called");
     viewClasses(request, response);
 });
 
 app.get('/viewGroups', function(request, response) {
-    console.log("view quizzes called");
+  //  console.log("view quizzes called");
     viewGroups(request, response);
     
 });
 
 app.get('/viewStudents', function(request, response) {
-    console.log("view students called");
+  //  console.log("view students called");
     viewStudents(request, response);
     
 });
 
 app.get('/getStudents', function(request, response) {
-    console.log("get students called");
-    getStudents(request, response);
-    
+  //  console.log("get students called");
+    getStudents(request, response); 
+});
+
+app.get('/getStudentsInClass', function(request, response) {
+   console.log("get students in class called");
+    getStudentsInClass(request, response);
 });
 
 app.post('/newClass', function(request, response) {
-    console.log("success!!");
+ //   console.log("success!!");
     insertClass(request, response);
+});
+
+app.post('/newGroup', function(request, response) {
+    console.log("success!!");
+    insertGroup(request, response);
+});
+
+app.post('/addStudentToGroup', function(request, response) {
+    console.log("success!!");
+    insertStudentInGroup(request, response);
 });
 
 
@@ -155,6 +169,41 @@ function viewStudents(request, response) {
     }); 
 }
 
+function getStudentsInClass(request, response) {
+   var requestUrl = url.parse(request.url, true);
+   var classId = parseInt(requestUrl.query.classId);  
+    console.log("class id: " + classId);
+  
+    var client = new pg.Client(connectionString);
+    
+   client.connect(function(err){
+        if (err) {
+            console.log("Error connecting to database");
+            console.log(err);
+            callback(err, null);
+        }
+        
+        var sql = "SELECT cu.id, cu.firstname, cu.lastname FROM classuserTOclass ctc INNER JOIN classUser cu ON cu.id = ctc.classuser_id WHERE class_id = $1::int;";
+        var params = [classId];
+        
+        var query = client.query(sql, params, function(err, result){
+            client.end(function(err) {
+                if (err) throw err;
+            });
+            
+            if (err) {
+                console.log("Error in query");
+                console.log(err);
+                callback(err, null);
+            }
+            
+            console.log("Found result: " + JSON.stringify(result.rows));
+            
+            response.json(result.rows);
+        });
+    }); 
+}
+
 function getStudents(request, response) {
    var requestUrl = url.parse(request.url, true);
    var classId = parseInt(requestUrl.query.classId);  
@@ -225,6 +274,81 @@ function insertClass(request, response) {
         });
         
     });
+}
+
+function insertGroup(request, response) {
+    console.log("inserting group");
+    //pull form data from body
+    var courseId = parseInt(request.body.courseNumber);
+    var groupName = request.body.newGroupNumber;
+    console.log("Group Name: " + groupName);
+    console.log("course Id: " + courseId);
+    var client = new pg.Client(connectionString);
+    
+    client.connect(function(err){
+        if (err) {
+            console.log("Error connecting to database");
+            console.log(err);
+            callback(err, null);
+        }
+        
+        var sql = "INSERT INTO classgroup(group_name, class_id) VALUES($1::text, $2::int);"
+        var params = [groupName, courseId];
+        
+        var query = client.query(sql, params, function(err, result){
+            client.end(function(err) {
+                if (err) throw err;
+            });
+            
+            if (err) {
+                console.log("Error in query");
+                console.log(err);
+                callback(err, null);
+            }
+            
+            response.redirect('/viewGroups.html');
+        });
+        
+    }); 
+}
+
+function insertStudentInGroup(request, response) {
+    console.log("inserting student in group");
+    //pull form data from body
+   // var courseId = parseInt(request.body.courseNumber);
+    var userId = parseInt(request.body.studentName);
+    var groupId = parseInt(request.body.groupName);
+    console.log("Group Id: " + groupId);
+   // console.log("Course Id: " + courseId);
+    console.log("User Id: " + userId);
+    
+    var client = new pg.Client(connectionString);
+    
+    client.connect(function(err){
+        if (err) {
+            console.log("Error connecting to database");
+            console.log(err);
+            callback(err, null);
+        }
+        
+        var sql = "INSERT INTO classuserTOgroup(classUser_id, group_id) VALUES($1::int, $2::int);"
+        var params = [userId, groupId];
+        
+        var query = client.query(sql, params, function(err, result){
+            client.end(function(err) {
+                if (err) throw err;
+            });
+            
+            if (err) {
+                console.log("Error in query");
+                console.log(err);
+                callback(err, null);
+            }
+            
+            response.redirect('/viewGroups.html');
+        });
+        
+    });  
 }
 
 
