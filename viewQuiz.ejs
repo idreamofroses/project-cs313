@@ -1,8 +1,7 @@
 <!DOCTYPE html>
 <html>
-
 <head>
-    <title>Create Group</title>
+	<title>View Quiz</title>
     <link rel="stylesheet" href="css/bootstrap.min.css">
 
     <!-- Optional theme -->
@@ -10,34 +9,8 @@
 
     <!-- My css -->
     <link rel="stylesheet" href="css/main.css">
-    <script>
-        function viewClasses() {
-            var xhttp = new XMLHttpRequest();
-            xhttp.onreadystatechange = function() {
-                if (this.readyState == 4 && this.status == 200) {
-                    var tableData = " ";
-                    var myObj = JSON.parse(this.responseText);
-                   // alert("num items:" + myObj.length);
-                    for(var i = 0; i < myObj.length; i++)
-                    {
-                        var classId = myObj[i].id;
-                        var courseTitle = myObj[i].name;
-                        var courseNumber = myObj[i].class_code;
-                        var sectionNumber = myObj[i].section;
-                        var row = "<option value='" + classId + "'>" + courseTitle + ": " + courseNumber + " - " + sectionNumber + "</option>"
-                      tableData += row;
-                    }
-                    document.getElementById("courseNumber").innerHTML =  tableData;
-                }
-            };
-            xhttp.open("GET", "/viewClasses", true);
-            xhttp.send();
-        }
-    </script>
 </head>
-    
-<body onload="viewClasses()">
-    
+<body >
     <nav class="navbar navbar-default">
   <div class="container-fluid">
     <!-- Brand and toggle get grouped for better mobile display -->
@@ -63,7 +36,7 @@
             <li><a href="createclasses.html">Add Classes</a></li>
           </ul>
         </li>
-        <li class="dropdown active">
+        <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Groups <span class="caret"></span></a>
           <ul class="dropdown-menu">
             <li><a href="viewgroups.html">View Groups By Class</a></li>
@@ -71,7 +44,7 @@
             <li><a href="creategroups.html">Create Groups</a></li>
           </ul>
         </li>
-        <li class="dropdown">
+        <li class="dropdown active">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Quizzes <span class="caret"></span></a>
           <ul class="dropdown-menu">
             <li><a href="viewquizzes.html">View Quizzes</a></li>
@@ -91,44 +64,52 @@
 </nav>
     
     <div class="jumbotron col-sm-8 col-sm-push-2">
-        <h1 class="text-center">Manage Groups</h1>
-         <h2 class="text-center">Create New Group</h2>
+        <h1 class="text-center">Manage Quizzes</h1>
+        <h2 class="text-center"><%= sql[0].name  %>: <%= sql[0].class_code  %> - <%= sql[0].section  %></h2>
     </div>
     
     <div class="container">
-    <form action="/newGroup" method="post">
+    <div class="row">
+        <div class="col-sm-8 col-sm-push-2">
+            <h3 ><%= sql[0].quizname  %> - Questions: </h3>
+            <table class="table">
+                <tr>
+                    <th># </th>
+                    <th> Question </th>
+                    <th> View Answers </th>
+                </tr>
+                <% for(var i = 0; i < sql.length; i++) {%>
+                <tr>
+                    <td><%= i+1 %>. </td>
+                    <td> <%= sql[i].question %> </td>
+                    <td> <a href="/viewAnswers?questionId=<%= sql[i].question_id %>&quizId=<%= sql[0].quiz_id %>" class="btn btn-default"><span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span></a> </td>
+                </tr>
+                <% } %>
+            </table>
+    
+            
+        </div>    
+    </div>
+    </div>
+    
+    <div class="container">
+    <form action="/newQuestion" method="post">
         <div class="row">
-        <div class="form-group col-sm-6 col-sm-push-2">
-            <label for="courseNumber">Course Number-Section</label>
-            <select id="courseNumber" name="courseNumber" class="form-control">
-                <!-- These options will be generated from db -->
-                <option>CS 313-02</option>
-            </select>
+        <div class="form-group col-sm-3 col-sm-push-3">
+            <input type="hidden" name="quizId" value="<%= sql[0].id %>">
+            <input type="text" id="newQuestion" name="newQuestion" class="form-control" default="Enter New Question">
+        </div>
+        <div class="form-group col-sm-3 col-sm-push-3">
+            <button type="submit" class="btn btn-default">Add Question</button>
         </div>
         </div>
         <div class="row">
-        <div class="form-group col-sm-6 col-sm-push-2">
-            <label for="newGroupNumber">New Group Number</label>
-            <input type="text" class="form-control" id="newGroupNumber" name="newGroupNumber" placeholder="02">
-        </div>
-        </div>
-        <div class="row">
-        <div class="form-group col-sm-2 col-sm-push-2">
-            <br/>
-            <a href="viewGroups.html" class="btn btn-default"><span class="glyphicon glyphicon-arrow-left" aria-hidden="true"></span> View Groups</a>
-        </div>
-        <div class="form-group col-sm-2 col-sm-push-2">
-            <br/>
-            <button type="submit" class="btn btn-default">Add to Group</button>
-        </div>
-        <div class="form-group col-sm-2 col-sm-push-2">
-            <br/>
-            <a href="addstudentstogroup.html" class="btn btn-default">Add Student To Group <span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span></a>
+        <div class="col-sm-10 col-sm-push-1">
+            <a href="viewquizzes.html" class="btn btn-default"><span class='glyphicon glyphicon-arrow-left' aria-hidden='true'></span> Select Different Quiz</a>
         </div>
         </div>
     </form>
     </div>
-    
     <!-- JQUERY -->
     <script src="js/jquery.min.js"></script>
         

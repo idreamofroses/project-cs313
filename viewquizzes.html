@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <title>Welcome</title>
+    <title>View Quizzes</title>
     <link rel="stylesheet" href="css/bootstrap.min.css">
 
     <!-- Optional theme -->
@@ -10,10 +10,56 @@
 
     <!-- My css -->
     <link rel="stylesheet" href="css/main.css">
-
+    <script>
+        function viewClasses() {
+           // alert("ViewClasses() called");
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    var tableData = "";
+                    var myObj = JSON.parse(this.responseText);
+                    for(var i = 0; i < myObj.length; i++)
+                    {
+                        var courseid = myObj[i].id;
+                        var courseNumber = myObj[i].class_code;
+                        var sectionNumber = myObj[i].section;
+                      var row = "<option value='" + courseid + "'>" + courseNumber + "-" + sectionNumber + "</option>";
+                      tableData += row;
+                    }
+                    document.getElementById("courseNumber").innerHTML =  tableData;
+                    getQuizzes();
+                }
+            };
+            xhttp.open("GET", "/viewClasses", true);
+            xhttp.send();
+        }
+        function getQuizzes() {
+           // alert("getQuizzes() called");
+            var classId = document.getElementById("courseNumber").value;
+          //  alert("Class Id:" + classId);
+            var url = "/viewQuizzes?classId=" + classId;
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    var tableData = "";
+                    var myObj = JSON.parse(this.responseText);
+                    for(var i = 0; i < myObj.length; i++)
+                    {
+                        var quizId = myObj[i].id;
+                        var qName = myObj[i].quizname;
+                        var row = "<option value='" + quizId + "'>" + qName + "</option>";
+                      tableData += row;
+                    }
+                    document.getElementById("quizName").innerHTML =  tableData;
+                }
+            };
+            xhttp.open("GET", url, true);
+            xhttp.send();
+        }
+    </script>
 </head>
     
-<body>
+<body onload="viewClasses()">
     
     <nav class="navbar navbar-default">
   <div class="container-fluid">
@@ -69,6 +115,34 @@
     
     <div class="jumbotron col-sm-8 col-sm-push-2">
         <h1 class="text-center">Manage Quizzes</h1>
+        <h2 class="text-center">View Quizzes</h2>
+    </div>
+    
+    <div class="container"> 
+        <form action="/viewQuiz" method="get">
+        <div class="row">
+        <div class="form-group col-sm-6 col-sm-push-2">
+            <label for="courseNumber">Course Number-Section</label>
+            <select id="courseNumber" name="courseNumber" class="form-control" onchange="getQuizzes()" >
+                <!-- this is just a placeholder These options will be generated from db -->
+                <option>CS 313-02</option>
+            </select>
+            <label for="quizName">Quiz Title</label>
+            <select id="quizName" name="quizName" class="form-control">
+            </select>
+        </div>
+        </div>
+        <div class="row">
+        <div class="form-group col-sm-2 col-sm-push-4">
+            <br/>
+            <button type="submit" class="btn btn-default">View Quiz</button>
+        </div>
+        <div class="form-group col-sm-2 col-sm-push-4">
+            <br/>
+            <a href="createquizzes.html" class="btn btn-default">Create New Quiz  <span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span></a>
+        </div>
+        </div>
+    </form>
     </div>
     
     <!-- JQUERY -->
