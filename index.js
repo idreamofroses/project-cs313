@@ -59,6 +59,11 @@ app.get('/getStudentsInClass', function(request, response) {
     getStudentsInClass(request, response);
 });
 
+app.get('/getGrades', function(request, response) {
+   console.log("Get grades called");
+    getGrades(request, response);
+});
+
 app.post('/newClass', function(request, response) {
  //   console.log("success!!");
     insertClass(request, response);
@@ -729,4 +734,8 @@ function returnViewAnswers(response, questionId, quizId) {
         });
         
     });   
+}
+
+function getGrades(request, response) {
+    
 }
