@@ -70,6 +70,26 @@
     <div class="jumbotron col-sm-8 col-sm-push-2">
         <h1 class="text-center">Manage Grades</h1>
     </div>
+    <div class="container">
+         <form>
+            <div class="row">
+        <div class="form-group col-sm-4 col-sm-push-1">
+            <label for="studentName">Select quiz to see grades</label>
+            <select id="quizName" name ="quizName" class="form-control">
+                <!-- These options will be generated from db -->
+                <option>Using Pointers</option>
+                <option>Dynamically Allocated Memory</option>
+            </select>
+        </div>
+                        <div class="row">
+        <div class="form-group col-sm-2 col-sm-push-1">
+            <br/>
+            <button type="submit" class="btn btn-default">View Grades</button>
+             </form>
+        </div>
+        </div>
+       
+             </div>
     
     <!-- JQUERY -->
     <script src="js/jquery.min.js"></script>

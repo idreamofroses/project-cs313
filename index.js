@@ -737,5 +737,6 @@ function returnViewAnswers(response, questionId, quizId) {
 }
 
 function getGrades(request, response) {
+    console.log("Getting grades");
     
 }
